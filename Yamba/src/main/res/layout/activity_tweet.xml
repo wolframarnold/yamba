@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
->
+    android:background="@drawable/twitter_bird_light"
+    android:alpha="0.5">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +21,8 @@
         android:ems="10"
         android:id="@+id/edit_tweet"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:hint="@string/text_edit_hint" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,7 +30,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/chars_remaining"
         android:id="@+id/text_char_count"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        tools:text="140"
+        android:hint="@string/text_edit_hint" />
 
     <Button
         android:layout_width="match_parent"

@@ -1,9 +1,11 @@
 package com.twitter.university.android.wa.yamba;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,7 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
     EditText mEditText;
     TextView mCharCounter;
     YambaClient mYambaClient;
+    Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +39,23 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
         mCharCounter = (TextView) findViewById(R.id.text_char_count);
         mCharCounter.setText("140 " + getString(R.string.chars_remaining));
 
+        mToast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
+
         mYambaClient = new YambaClient("student", "password");
     }
 
     @Override
     public void afterTextChanged(Editable edt)
     {
-        mCharCounter.setText(String.valueOf((140-edt.length())) + " " + getString(R.string.chars_remaining));
+        int remainingChars = 140-edt.length();
+        mCharCounter.setText(String.valueOf(remainingChars) + " " + getString(R.string.chars_remaining));
+        if (remainingChars <= 0) {
+            mCharCounter.setTextColor(Color.RED);
+        } else if (remainingChars <= 10) {
+            mCharCounter.setTextColor(Color.BLUE);
+        } else {
+            mCharCounter.setTextColor(Color.DKGRAY);
+        }
     }
 
     @Override
@@ -51,11 +64,42 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-    // TextWatcher
-    // Spannable
-    // Green while lots of chars left
-    // Yellow while only a few left
-    // Red when overshot
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (BuildConfig.DEBUG) Log.v(TAG, "onStart() invoked");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (BuildConfig.DEBUG) Log.v(TAG, "onRestart() invoked");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (BuildConfig.DEBUG) Log.v(TAG, "onResume() invoked");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (BuildConfig.DEBUG) Log.v(TAG, "onPause() invoked");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (BuildConfig.DEBUG) Log.v(TAG, "onStop() invoked");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (BuildConfig.DEBUG) Log.v(TAG, "onDestroy() invoked");
+    }
+// TODO -- make success/failure message a string resource
 
     @Override
     public void onClick(View view) {
@@ -66,8 +110,9 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
                 // Handle button click
                 String msg = mEditText.getText().toString();
 
-                new PostTweet().execute(msg);
-
+                if (!TextUtils.isEmpty(msg)) {
+                    new PostTweet().execute(msg);
+                }
                 mEditText.setText("");
 
                 break;
@@ -76,7 +121,7 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
         }
     }
 
-    private class PostTweet extends AsyncTask<String, Integer, Boolean> {
+    private class PostTweet extends AsyncTask<String, Void, Boolean> {
         Boolean success;
 
         protected Boolean doInBackground(String... s) {
@@ -94,9 +139,11 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
 
         protected void onPostExecute(Boolean success) {
             if (success) {
-                Toast.makeText(TweetActivity.this, "Tweet posted!", Toast.LENGTH_SHORT).show();
+                mToast.setText("Tweet posted!");
+                mToast.show();
             } else {
-                Toast.makeText(TweetActivity.this, "OOPS... something went wrong. Try again. Sorry we lost your Tweet.", Toast.LENGTH_LONG).show();
+                mToast.setText("OOPS... something went wrong. Try again. Sorry we lost your Tweet.");
+                mToast.show();
             }
         }
     }

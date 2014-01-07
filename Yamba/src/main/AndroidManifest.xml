@@ -18,6 +18,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.twitter.university.android.wa.yamba.TweetService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name="com.twitter.university.android.wa.yamba.TweetStatusReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.twitter.university.android.wa.ACTION_TWEET_STATUS" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.twitter.university.android.wa.yamba;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,8 +23,6 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
     private static final String TAG = "TweetActivity";
     EditText mEditText;
     TextView mCharCounter;
-    YambaClient mYambaClient;
-    Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +37,6 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
 
         mCharCounter = (TextView) findViewById(R.id.text_char_count);
         mCharCounter.setText("140 " + getString(R.string.chars_remaining));
-
-        mToast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
-
-        mYambaClient = new YambaClient("student", "password");
     }
 
     @Override
@@ -111,7 +106,9 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
                 String msg = mEditText.getText().toString();
 
                 if (!TextUtils.isEmpty(msg)) {
-                    new PostTweet().execute(msg);
+                    Intent intent = new Intent(this, TweetService.class);
+                    intent.putExtra("MESSAGE", msg);
+                    startService(intent);
                 }
                 mEditText.setText("");
 
@@ -120,31 +117,31 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
                 // We should never get here!
         }
     }
-
-    private class PostTweet extends AsyncTask<String, Void, Boolean> {
-        Boolean success;
-
-        protected Boolean doInBackground(String... s) {
-            Log.v(TAG, s.toString());
-            try {
-                mYambaClient.postStatus(s[0]);
-                success = true;
-                Log.v(TAG, "Upload succeeded");
-            } catch (YambaClientException e) {
-                success = false;
-                Log.w(TAG, "Upload failed", e);
-            }
-            return success;
-        }
-
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-                mToast.setText("Tweet posted!");
-                mToast.show();
-            } else {
-                mToast.setText("OOPS... something went wrong. Try again. Sorry we lost your Tweet.");
-                mToast.show();
-            }
-        }
-    }
+//
+//    private class PostTweet extends AsyncTask<String, Void, Boolean> {
+//        Boolean success;
+//
+//        protected Boolean doInBackground(String... s) {
+//            Log.v(TAG, s.toString());
+//            try {
+//                mYambaClient.postStatus(s[0]);
+//                success = true;
+//                Log.v(TAG, "Upload succeeded");
+//            } catch (YambaClientException e) {
+//                success = false;
+//                Log.w(TAG, "Upload failed", e);
+//            }
+//            return success;
+//        }
+//
+//        protected void onPostExecute(Boolean success) {
+//            if (success) {
+//                mToast.setText("Tweet posted!");
+//                mToast.show();
+//            } else {
+//                mToast.setText("OOPS... something went wrong. Try again. Sorry we lost your Tweet.");
+//                mToast.show();
+//            }
+//        }
+//    }
 }

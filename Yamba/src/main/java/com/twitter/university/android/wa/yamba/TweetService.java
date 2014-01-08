@@ -12,6 +12,7 @@ public class TweetService extends IntentService {
     private static final String TAG = "TweetService";
     public static final String ACTION_TWEET_STATUS = "com.twitter.university.android.wa.ACTION_TWEET_STATUS";
     public static final String EXTRA_TWEET_STATUS = "com.twitter.university.android.wa.EXTRA_TWEET_STATUS";
+    public static final String PERMISSION_TWEET_NOTIFY = "com.twitter.university.android.wa.yamba.permission.NEW_TWEET_NOTICE";
     private YambaClient mYambaClient;
 
     public TweetService() {
@@ -38,7 +39,7 @@ public class TweetService extends IntentService {
             }
             Intent broadcastIntent = new Intent(ACTION_TWEET_STATUS);
             broadcastIntent.putExtra(EXTRA_TWEET_STATUS, success);
-            sendBroadcast(broadcastIntent);
+            sendBroadcast(broadcastIntent, PERMISSION_TWEET_NOTIFY);
         }
     }
 }

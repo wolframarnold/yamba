@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/twitter_bird_light"
     android:alpha="0.5">
 
     <TextView
@@ -14,29 +13,12 @@
         android:text="@string/activity_tweet_title"
         android:layout_gravity="center_horizontal" />
 
-    <EditText
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/edit_tweet"
+        android:layout_height="match_parent"
+        android:name="com.twitter.university.android.wa.yamba.TweetFragment"
+        android:id="@+id/fragment_tweet"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:hint="@string/text_edit_hint" />
+        tools:layout="@layout/fragment_tweet" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/chars_remaining"
-        android:id="@+id/text_char_count"
-        android:layout_gravity="right"
-        tools:text="140"
-        android:hint="@string/text_edit_hint" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tweet_button"
-        android:id="@+id/button_tweet" />
 </LinearLayout>

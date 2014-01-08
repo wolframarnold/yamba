@@ -111,37 +111,10 @@ public class TweetActivity extends Activity implements View.OnClickListener, Tex
                     startService(intent);
                 }
                 mEditText.setText("");
-
+                finish();
                 break;
             default:
                 // We should never get here!
         }
     }
-//
-//    private class PostTweet extends AsyncTask<String, Void, Boolean> {
-//        Boolean success;
-//
-//        protected Boolean doInBackground(String... s) {
-//            Log.v(TAG, s.toString());
-//            try {
-//                mYambaClient.postStatus(s[0]);
-//                success = true;
-//                Log.v(TAG, "Upload succeeded");
-//            } catch (YambaClientException e) {
-//                success = false;
-//                Log.w(TAG, "Upload failed", e);
-//            }
-//            return success;
-//        }
-//
-//        protected void onPostExecute(Boolean success) {
-//            if (success) {
-//                mToast.setText("Tweet posted!");
-//                mToast.show();
-//            } else {
-//                mToast.setText("OOPS... something went wrong. Try again. Sorry we lost your Tweet.");
-//                mToast.show();
-//            }
-//        }
-//    }
 }

@@ -18,6 +18,7 @@ public class TweetFragment extends Fragment implements View.OnClickListener, Tex
 
     EditText mEditText;
     TextView mCharCounter;
+    OnTweetCompletedListener mOnTweetCompletedListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +35,7 @@ public class TweetFragment extends Fragment implements View.OnClickListener, Tex
         mCharCounter = (TextView) top.findViewById(R.id.text_char_count);
         mCharCounter.setText("140 " + getString(R.string.chars_remaining));
 
-        return top;
+        return top; // this will attach the Fragment to the Activity
     }
 
     @Override
@@ -73,11 +74,26 @@ public class TweetFragment extends Fragment implements View.OnClickListener, Tex
                     getActivity().startService(intent);
                 }
                 mEditText.setText("");
-                getActivity().finish();
+                notifyOnTweetCompletedListener();
                 break;
             default:
                 // We should never get here!
         }
+    }
+
+    public void setOnTweetCompletedListener(OnTweetCompletedListener listener) {
+        // "hard" reference like this may make the Activity linger in memory
+        // better to use a weak reference, but downside if the listener is implemented as an anonymous local class that (having an implied reference) that may go away
+        mOnTweetCompletedListener = listener;
+    }
+
+    public void notifyOnTweetCompletedListener() {
+        if (null != mOnTweetCompletedListener) {
+            mOnTweetCompletedListener.onTweetCompleted();
+        }
+    }
+    public interface OnTweetCompletedListener {
+        public void onTweetCompleted();
     }
 
 }
